@@ -1,0 +1,40 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "spareke": {
+      "regions": {
+        "$region": {
+          "publicProviders": {
+            "$providerId": {
+              "approx": {
+                ".read": true,
+                ".write": "auth != null && auth.uid === $providerId && auth.token.region === $region && (auth.token.role === 'MECHANIC' || auth.token.role === 'GARAGE_OWNER' || auth.token.role === 'GARAGE_TECHNICIAN' || auth.token.role === 'TOWING_PROVIDER' || auth.token.role === 'ADMIN')",
+                ".validate": "newData.hasChildren(['latitude','longitude','providerType','updatedAt']) && newData.child('latitude').isNumber() && newData.child('longitude').isNumber()"
+              }
+            }
+          },
+          "trips": {
+            "$tripId": {
+              "meta": {
+                ".read": "auth != null && (data.child('clientId').val() === auth.uid || data.child('providerId').val() === auth.uid || auth.token.role === 'ADMIN')",
+                ".write": "auth != null && (auth.token.role === 'ADMIN' || newData.child('clientId').val() === auth.uid || newData.child('providerId').val() === auth.uid || data.child('providerId').val() === auth.uid)",
+                ".validate": "newData.hasChildren(['clientId','status','region']) && newData.child('region').val() === $region"
+              },
+              "clientLocation": {
+                ".read": "auth != null && (root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/clientId').val() === auth.uid || root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/providerId').val() === auth.uid || auth.token.role === 'ADMIN')",
+                ".write": "auth != null && root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/clientId').val() === auth.uid && root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/status').val() !== 'COMPLETED' && root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/status').val() !== 'CANCELLED'",
+                ".validate": "newData.hasChildren(['latitude','longitude','updatedAt','tripId','role']) && newData.child('latitude').isNumber() && newData.child('longitude').isNumber()"
+              },
+              "providerLocation": {
+                ".read": "auth != null && (root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/clientId').val() === auth.uid || root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/providerId').val() === auth.uid || auth.token.role === 'ADMIN')",
+                ".write": "auth != null && root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/providerId').val() === auth.uid && root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/status').val() !== 'COMPLETED' && root.child('spareke/regions/'+$region+'/trips/'+$tripId+'/meta/status').val() !== 'CANCELLED'",
+                ".validate": "newData.hasChildren(['latitude','longitude','updatedAt','tripId','role']) && newData.child('latitude').isNumber() && newData.child('longitude').isNumber()"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,3 @@
+# Firebase Admin SDK setup helper notes
+# Do not paste private keys into committed files.
+# Use local shell exports, .env.local ignored by git, or hosting provider secret manager.

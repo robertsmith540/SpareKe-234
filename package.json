@@ -1,0 +1,40 @@
+{
+  "name": "spareke-marketplace",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "node prisma/seed.js",
+    "backend:setup": "npm run prisma:generate && npm run db:push && npm run db:seed",
+    "security:check-firebase-admin": "node scripts/check-firebase-admin-env.js",
+    "demo:setup": "npm install && npm run prisma:generate && npm run db:push && npm run db:seed",
+    "demo:reset": "rm -f prisma/dev.db prisma/dev.db-journal && npm run prisma:generate && npm run db:push && npm run db:seed",
+    "demo:archive": "bash scripts/create-demo-archive.sh"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^3.0.3",
+    "firebase": "^12.14.0",
+    "firebase-admin": "^13.10.0",
+    "jose": "^6.2.3",
+    "next": "^14.2.16",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "prisma": "^5.22.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  }
+}
